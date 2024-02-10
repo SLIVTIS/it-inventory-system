@@ -1,8 +1,11 @@
-# React + Vite
+Actividad integradora. Sprint, el corazón de SCRUM
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Esta es la primera fase de la actividad integradora de la unidad 1 de proyecto 2.
+Solo se a hecho la ruta y la vista del login.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Instrucciones:
+dentro de la carpeta raiz ejecutar los siguientes comandos.
+npm install
+Este comando instala los modulos necesarios para el proyecto.
+npm run dev
+este comando ejecuta el proyecto.
