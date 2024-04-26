@@ -1,7 +1,8 @@
-Actividad integradora. Sprint, el corazón de SCRUM
-
-Esta es la primera fase de la actividad integradora de la unidad 1 de proyecto 2.
-Solo se a hecho la ruta y la vista del login.
+Materia: Proyecto 2
+La apliocación FrontEnd esta realizada en React y Vite, esta se conecta a una api que esta en un hosting de Railway asi que se requiere de internet para poder ingresar.
+Las credenciales de acceso son:
+Usuario:soporte@areas.com
+Contraseña:4reas_S0p0rt3
 
 Instrucciones:
 dentro de la carpeta raiz ejecutar los siguientes comandos.
