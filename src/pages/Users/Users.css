@@ -1,0 +1,30 @@
+.user-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem;
+}
+
+.user-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-user-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.grid {
+    gap: 6px;
+}
+
+/* Dark mode styles */
+.dark .section {
+    border-color: #4B5563;
+}
+
+.dark .badge {
+    color: #4B5563;
+}
