@@ -7,7 +7,10 @@ import { useState } from 'react';
 import SideBar from './components/SideBar.jsx';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
 import Users from './pages/Users/Users.jsx';
-import AddUser from './pages/AddUser/AddUser.jsx';
+import AddUser from './pages/Users/AddUser.jsx';
+import Suppliers from './pages/Suppliers/Suppliers.jsx';
+import Countries from './pages/Countries/Countries.jsx';
+import Models from './pages/Models/Models.jsx';
 
 function App() {
 
@@ -15,18 +18,6 @@ function App() {
     { path: "/about", element: <div>Hola about</div> },
     { path: "/login", element: <Login /> }
   ];
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const isLogged = () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-
-  };
 
   return (
     <>
@@ -39,6 +30,11 @@ function App() {
                 <Route index element={<Users />} />
                 <Route path='/users/addUser' element={<AddUser />} />
               </Route>
+              <Route path='/suppliers'>
+                <Route index element={<Suppliers />} />
+              </Route>
+              <Route path='/countries' element={<Countries />} />
+              <Route path='/models' element={<Models />} />
             </Route>
           </RoutesWithAuthentication>
         </BrowserRouter>
