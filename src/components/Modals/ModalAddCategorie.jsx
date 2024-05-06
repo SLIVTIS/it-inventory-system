@@ -19,7 +19,7 @@ function ModalAddCategorie({ close }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchData("http://localhost:4000/api/v1/categories", "POST", formData);
+        fetchData("https://it-inventory-api.up.railway.app/api/v1/categories", "POST", formData);
     };
 
     useEffect(() => {

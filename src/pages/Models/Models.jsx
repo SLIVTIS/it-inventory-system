@@ -8,12 +8,12 @@ function Models() {
     const { data, error, isLoading, fetchData } = useFetch();
 
     useEffect(() => {
-        fetchData("http://localhost:4000/api/v1/articles");
+        fetchData("https://it-inventory-api.up.railway.app/api/v1/articles");
     }, []);
 
     const handleShowModal = (value) => {
         if (value) {
-            fetchData("http://localhost:4000/api/v1/articles");
+            fetchData("https://it-inventory-api.up.railway.app/api/v1/articles");
         }
         setShowModal(!showModal);
     };

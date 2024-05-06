@@ -12,12 +12,12 @@ function Suppliers() {
     const handleShowModal = (value) => {
         setShowModal(!showModal);
         if (value) {
-            fetchData("http://localhost:4000/api/v1/suppliers");
+            fetchData("https://it-inventory-api.up.railway.app/api/v1/suppliers");
         }
     };
 
     useEffect(() => {
-        fetchData("http://localhost:4000/api/v1/suppliers");
+        fetchData("https://it-inventory-api.up.railway.app/api/v1/suppliers");
     }, []);
 
     return (

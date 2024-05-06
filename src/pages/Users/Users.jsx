@@ -14,8 +14,6 @@ function Users() {
     React.useEffect(() => {
         fetchAdmins("https://it-inventory-api.up.railway.app/api/v1/admin");
         fetchUsers("https://it-inventory-api.up.railway.app/api/v1/admin/users");
-        //fetchAdmins("http://localhost:4000/api/v1/admin");
-        //fetchUsers("http://localhost:4000/api/v1/admin/users");
     }, []); // Solo se llama al montar el componente
 
     const handleNavigate = () => {

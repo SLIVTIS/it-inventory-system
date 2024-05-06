@@ -21,7 +21,7 @@ function ModalAddSupplier({ close }) {
 
     const handleSummit = (e) => {
         e.preventDefault();
-        fetchData("http://localhost:4000/api/v1/suppliers", "POST", formData);
+        fetchData("https://it-inventory-api.up.railway.app/api/v1/suppliers", "POST", formData);
     };
 
     useEffect(() => {

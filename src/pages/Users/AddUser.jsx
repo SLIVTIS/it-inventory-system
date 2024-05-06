@@ -54,7 +54,6 @@ function AddUser() {
         };
         if (passCorrect) {
             fetchData("https://it-inventory-api.up.railway.app/api/v1/admin", 'POST', body);
-            //fetchData("http://localhost:4000/api/v1/admin", 'POST', body);
         } else {
             console.log("Las contraseñas no coinciden");
         }

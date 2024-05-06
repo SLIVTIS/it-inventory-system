@@ -26,14 +26,13 @@ function ModalAddModel({ close }) {
     const handleShowCategories = (value) => {
         setShowCategorie(!showCategorie);
         if (value) {
-            categorieData("http://localhost:4000/api/v1/categories");
+            categorieData("https://it-inventory-api.up.railway.app/api/v1/categories");
         }
     };
 
     const handleSummit = (e) => {
         e.preventDefault();
-        console.log(formData);
-        fetchData("http://localhost:4000/api/v1/articles", "POST", formData);
+        fetchData("https://it-inventory-api.up.railway.app/api/v1/articles", "POST", formData);
     };
 
     useEffect(() => {
@@ -42,8 +41,8 @@ function ModalAddModel({ close }) {
         }
     }, [data]);
     useEffect(() => {
-        supplierData("http://localhost:4000/api/v1/suppliers");
-        categorieData("http://localhost:4000/api/v1/categories");
+        supplierData("https://it-inventory-api.up.railway.app/api/v1/suppliers");
+        categorieData("https://it-inventory-api.up.railway.app/api/v1/categories");
     }, []);
     return (
         <>
