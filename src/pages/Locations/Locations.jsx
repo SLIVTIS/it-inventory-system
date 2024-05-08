@@ -1,29 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import useFetch from '../../hooks/useFetch';
-import Button from '../../components/Buttons/Button';
-import { useNavigate } from 'react-router-dom';
-import ModalAddSupplier from './ModalAddSupplier';
-import Loader from '../../components/Loaders/Loader';
+import useFetch from '../../hooks/useFetch.js'
+import Button from '../../components/Buttons/Button.jsx'
+import ModalAddLocation from './ModalAddLocation.jsx';
+import Loader from '../../components/Loaders/Loader.jsx';
 
-function Suppliers() {
-    const navigate = useNavigate();
-    const { data, error, isLoading, fetchData } = useFetch();
+function Locations() {
     const [showModal, setShowModal] = useState(false);
+    const { data, error, isLoading, fetchData } = useFetch();
+
+    useEffect(() => {
+        fetchData("https://it-inventory-api.up.railway.app/api/v1/locations");
+    }, []);
 
     const handleShowModal = (value) => {
         setShowModal(!showModal);
         if (value === true) {
-            fetchData("https://it-inventory-api.up.railway.app/api/v1/suppliers");
+            fetchData("https://it-inventory-api.up.railway.app/api/v1/locations");
         }
     };
-
-    useEffect(() => {
-        fetchData("https://it-inventory-api.up.railway.app/api/v1/suppliers");
-    }, []);
-
     return (
         <>
-            {showModal && <ModalAddSupplier close={handleShowModal} />}
+            {showModal && <ModalAddLocation close={handleShowModal} />}
             {isLoading ? (
                 <div className='w-full h-full grid place-items-center'>
                     <Loader />
@@ -31,30 +28,25 @@ function Suppliers() {
             ) : (
                 <div className="flex flex-col gap-8 p-6">
                     <div className="flex items-center justify-between">
-                        <h1 className='text-2xl font-bold'>Proveedores</h1>
-                        <Button onClick={handleShowModal}  >Agregar proveedor</Button>
+                        <h1 className='text-2xl font-bold'>Ubicaciones</h1>
+                        <Button onClick={handleShowModal}  >Agregar ubicación</Button>
                     </div>
+
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-600 ">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-100">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">
-                                        Código
+                                        Codigo
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        País
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Estado
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         Nombre
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Descripción
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Teléfono
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Activo
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Creado
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         <span className="sr-only">Edit</span>
@@ -63,25 +55,19 @@ function Suppliers() {
                             </thead>
                             <tbody>
                                 {data && data.length > 0 ? (
-                                    data.map(supplier => (
-                                        <tr className="bg-white border-b  hover:bg-gray-50 " key={supplier.id}>
+                                    data.map(location => (
+                                        <tr className="bg-white border-b  hover:bg-gray-50 " key={location.id}>
                                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                                {supplier.code}
+                                                {location.code}
                                             </th>
                                             <td className="px-6 py-4">
-                                                {supplier.name}
+                                                {location.Country.code}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {supplier.description}
+                                                {location.state}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {supplier.telephone}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                {supplier.active === true ? "Activo" : "Inactivo"}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                {supplier.createdAt}
+                                                {location.name}
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
@@ -102,4 +88,4 @@ function Suppliers() {
     )
 }
 
-export default Suppliers
+export default Locations

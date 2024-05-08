@@ -4,6 +4,7 @@ import UserList from '../../components/UserList/UserList';
 import useFetch from '../../hooks/useFetch';
 import Button from '../../components/Buttons/Button';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../../components/Loaders/Loader';
 
 function Users() {
     const navigate = useNavigate();
@@ -21,16 +22,24 @@ function Users() {
     };
 
     return (
-        <div className="user-container">
-            <div className="user-header">
-                <h1 className='text-2xl font-bold'>Gestión de usuarios</h1>
-                <Button onClick={handleNavigate} >Agregar usuario</Button>
-            </div>
-            <div className="grid">
-                <UserList title='Administradores' list={admins} />
-                <UserList title='Usuarios' list={users} />
-            </div>
-        </div>
+        <>
+            {isLoadingAdmins || isLoadingUsers ? (
+                <div className='w-full h-full grid place-items-center'>
+                    <Loader />
+                </div>
+            ) : (
+                <div className="user-container">
+                    <div className="user-header">
+                        <h1 className='text-2xl font-bold'>Gestión de usuarios</h1>
+                        <Button onClick={handleNavigate} >Agregar usuario</Button>
+                    </div>
+                    <div className="grid">
+                        <UserList title='Administradores' list={admins} />
+                        <UserList title='Usuarios' list={users} />
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

@@ -19,7 +19,6 @@ function Login() {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    console.log(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -35,8 +34,6 @@ function Login() {
     };
 
     fetchData("https://it-inventory-api.up.railway.app/api/v1/login", 'POST', body);
-    //fetchData("http://localhost:4000/api/v1/login", 'POST', body);
-
   };
 
   return (
