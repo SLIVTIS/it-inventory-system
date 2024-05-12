@@ -22,6 +22,7 @@ function StoreStock() {
     const { data, error, isLoading, fetchData } = useFetch();
     const { data: resetState, error: rError, isLoading: rIsLoading, fetchData: resetStateData } = useFetch();
     const { data: store, error: sError, isLoading: sIsLoading, fetchData: storeData } = useFetch();
+    const { data: unassign, error: uError, isLoading: uIsLoading, fetchData: unassignData } = useFetch();
 
     const handleFetch = () => {
         fetchData(`${API_DOMAIN}/api/v1/stock/${storeId}`);
@@ -29,17 +30,17 @@ function StoreStock() {
     const handleFetchStore = () => {
         storeData(`${API_DOMAIN}/api/v1/stores/${storeId}`);
     }
-    const handleFetchReset = () => {
-        resetStateData(`${API_DOMAIN}/api/v1/state/reset`, 'PATCH', formData);
-    }
-
-    const handleResetState = (value) => {
+    const handleFetchReset = (value) => {
         const formData = {
             stateId: value.statusId,
             status: value.status,
         }
-        handleFetchReset();
+        resetStateData(`${API_DOMAIN}/api/v1/state/reset`, 'PATCH', formData);
     }
+    const handleUnassign = (value) => {
+        unassignData(`${API_DOMAIN}/api/v1/stores/permission/${value}`, 'DELETE');
+    }
+
     const handleShowModal = (value) => {
         setShowModal(!showModal);
         if (value === true) {
@@ -65,10 +66,6 @@ function StoreStock() {
         setShowModalResponsive(!showModalResponsive);
     };
 
-    const handleUnassign = (value) => {
-        console.log(value);
-    }
-
     useEffect(() => {
         handleFetch();
         handleFetchStore();
@@ -78,7 +75,20 @@ function StoreStock() {
         if (store) {
             setUsers(store.user);
         }
-    }, [store, users]);
+
+    }, [store]);
+
+    useEffect(() => {
+        if (unassign) {
+            handleFetchStore();
+        }
+    }, [unassign]);
+
+    useEffect(() => {
+        if (resetState) {
+            handleFetch();
+        }
+    }, [resetState]);
     return (
         <>
             {showModal && <ModalStoreStock close={handleShowModal} storeId={storeId} title={title} />}
@@ -107,7 +117,7 @@ function StoreStock() {
                             {users && users.length > 0 ? users.map(user => {
                                 return <div key={user.User.id}>
                                     <span>{user.User.username} </span>
-                                    {admin && <button className=' text-red-700' onClick={() => handleUnassign(user.User.username)}>
+                                    {admin && <button className=' text-red-700' onClick={() => handleUnassign(user.id)}>
                                         <CloseIcon className='p-0.5' />
                                     </button>}
                                 </div>
@@ -168,7 +178,7 @@ function StoreStock() {
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 {article.status === 'rechazada' && admin && <button
-                                                    onClick={() => handleResetState(article)}
+                                                    onClick={() => handleFetchReset(article)}
                                                     className='mx-2 font-medium text-blue-600 hover:underline'
                                                 >Reenviar</button>}
                                                 <button

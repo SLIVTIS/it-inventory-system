@@ -7,11 +7,12 @@ import PublicIcon from '@mui/icons-material/Public';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import StoreIcon from '@mui/icons-material/Store';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 
 export const SideBarData = [
     {
-        title: "Home",
-        icon: <HomeIcon />,
+        title: "Movimientos",
+        icon: <MoveToInboxIcon />,
         link: "/dashboard",
         admin: false
     },

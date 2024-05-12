@@ -9,21 +9,34 @@ import API_DOMAIN from '../../config.js';
 function StockGeneral() {
     const [admin, setAdmin] = useState(isAdmin());
     const [showModal, setShowModal] = useState(false);
+    const [showModalEdit, setShowModalEdit] = useState(null);
     const { data, error, isLoading, fetchData } = useFetch();
 
-    useEffect(() => {
+    const handleFetch = () => {
         fetchData(`${API_DOMAIN}/api/v1/stock`);
-    }, []);
+    }
+
+    const handleShowModalEdit = (update, value) => {
+        setShowModalEdit(value);
+        if (update === true) {
+            handleFetch();
+        }
+    }
 
     const handleShowModal = (value) => {
         setShowModal(!showModal);
         if (value === true) {
-            fetchData(`${API_DOMAIN}/api/v1/stock`);
+            handleFetch();
         }
     };
+
+    useEffect(() => {
+        handleFetch();
+    }, []);
     return (
         <>
             {showModal && <ModalAddStock close={handleShowModal} />}
+            {showModalEdit && <ModalAddStock close={handleShowModalEdit} stockObject={showModalEdit} />}
             {isLoading ? (
                 <div className='w-full h-full grid place-items-center'>
                     <Loader />
@@ -85,7 +98,7 @@ function StockGeneral() {
                                                 {article.active === true ? "Activo" : "Inactivo"}
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                {admin && <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>}
+                                                {admin && <button onClick={() => handleShowModalEdit(false, article)} className="font-medium text-blue-600 hover:underline">Edit</button>}
                                             </td>
                                         </tr>
                                     ))

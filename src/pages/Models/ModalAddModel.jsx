@@ -3,10 +3,12 @@ import useFetch from '../../hooks/useFetch';
 import Button from '../../components/Buttons/Button';
 import ModalAddCategorie from '../../components/Modals/ModalAddCategorie';
 import API_DOMAIN from '../../config';
+import Loader from '../../components/Loaders/Loader';
 
-function ModalAddModel({ close }) {
+function ModalAddModel({ close, modelObject }) {
     const { data, error, isLoading, fetchData } = useFetch();
     const [showCategorie, setShowCategorie] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const { data: suppliers, error: sError, isLoading: sIsLoading, fetchData: supplierData } = useFetch();
     const { data: categories, error: cError, isLoading: cIsLoading, fetchData: categorieData } = useFetch();
     const [formData, setFormData] = useState({
@@ -33,7 +35,11 @@ function ModalAddModel({ close }) {
 
     const handleSummit = (e) => {
         e.preventDefault();
-        fetchData(`${API_DOMAIN}/api/v1/articles`, "POST", formData);
+        if (isEdit) {
+            fetchData(`${API_DOMAIN}/api/v1/articles/${modelObject.id}`, "PUT", formData);
+        } else {
+            fetchData(`${API_DOMAIN}/api/v1/articles`, "POST", formData);
+        }
     };
 
     useEffect(() => {
@@ -41,7 +47,19 @@ function ModalAddModel({ close }) {
             close(true);
         }
     }, [data]);
+
     useEffect(() => {
+        if (modelObject) {
+            setIsEdit(true);
+            setFormData(prevState => ({
+                ...prevState,
+                'supplier': modelObject.supplier.id,
+                'categorie': modelObject.categorie.id,
+                'modelname': modelObject.modelname,
+                'description': modelObject.description
+            }));
+        }
+
         supplierData(`${API_DOMAIN}/api/v1/suppliers`);
         categorieData(`${API_DOMAIN}/api/v1/categories`);
     }, []);
@@ -54,7 +72,7 @@ function ModalAddModel({ close }) {
                         {/*Modal header*/}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                             <h3 className="text-lg font-semibold text-gray-900 ">
-                                Agregar un nuevo modelo
+                                {isEdit ? "Actualizar modelo" : "Agregar un nuevo modelo"}
                             </h3>
                             <button type="button" onClick={close} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -72,6 +90,7 @@ function ModalAddModel({ close }) {
                                     <label htmlFor="categorie" className="block mb-2 text-sm font-medium text-gray-900 ">Categoria</label>
                                     <select
                                         id="categorie"
+                                        value={formData.categorie}
                                         onChange={handleChange}
                                         name='categorie'
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
@@ -88,6 +107,7 @@ function ModalAddModel({ close }) {
                                     <select
                                         id="supplier"
                                         name='supplier'
+                                        value={formData.supplier}
                                         onChange={handleChange}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                                         required
@@ -108,6 +128,7 @@ function ModalAddModel({ close }) {
                                         type="text"
                                         name="modelname"
                                         id="modelname"
+                                        value={formData.modelname}
                                         onChange={handleChange}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                                         placeholder="Escribe el modelo"
@@ -119,21 +140,22 @@ function ModalAddModel({ close }) {
                                         id="description"
                                         name="description"
                                         rows="4"
+                                        defaultValue={formData.description}
+                                        onChange={handleChange}
                                         onChangeCapture={handleChange}
                                         className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
                                         placeholder="Escribe una descripción del modelo"></textarea>
                                 </div>
                             </div>
                             {error && <p className='text-red-600'>{error}</p>}
-                            <Button type="submit" >
+                            {isLoading ? <Loader /> : <Button type="submit" >
                                 <svg className="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                                {isLoading ? "Agregando..." : "Agregar modelo"}
-                            </Button>
+                                {isEdit ? "Editar" : "Agregar modelo"}
+                            </Button>}
                         </form>
                     </div>
                 </div>
             </div>
-
             {showCategorie && <ModalAddCategorie close={handleShowCategories} />}
         </>
     )

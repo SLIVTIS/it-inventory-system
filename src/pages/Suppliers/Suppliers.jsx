@@ -5,14 +5,21 @@ import { useNavigate } from 'react-router-dom';
 import ModalAddSupplier from './ModalAddSupplier';
 import Loader from '../../components/Loaders/Loader';
 import API_DOMAIN from '../../config';
+import { formatDate } from '../../utils/formatDate';
 
 function Suppliers() {
     const navigate = useNavigate();
     const { data, error, isLoading, fetchData } = useFetch();
+    const { data: onDelete, error: dError, isLoading: dIsLoading, fetchData: fetchDelete } = useFetch();
     const [showModal, setShowModal] = useState(false);
+    const [showModalEdit, setShowModalEdit] = useState(null);
 
     const handleFetch = () => {
         fetchData(`${API_DOMAIN}/api/v1/suppliers`);
+    }
+
+    const handleDelete = (id) => {
+        fetchDelete(`${API_DOMAIN}/api/v1/suppliers/${id}`, "DELETE");
     }
 
     const handleShowModal = (value) => {
@@ -22,6 +29,19 @@ function Suppliers() {
         }
     };
 
+    const handleShowModalEdit = (update, value) => {
+        setShowModalEdit(value);
+        if (update === true) {
+            handleFetch();
+        }
+    }
+
+    useEffect(() => {
+        if (onDelete) {
+            handleFetch();
+        }
+    }, [onDelete]);
+
     useEffect(() => {
         handleFetch();
     }, []);
@@ -29,6 +49,7 @@ function Suppliers() {
     return (
         <>
             {showModal && <ModalAddSupplier close={handleShowModal} />}
+            {showModalEdit && <ModalAddSupplier close={handleShowModalEdit} supplierObject={showModalEdit} />}
             {isLoading ? (
                 <div className='w-full h-full grid place-items-center'>
                     <Loader />
@@ -86,10 +107,19 @@ function Suppliers() {
                                                 {supplier.active === true ? "Activo" : "Inactivo"}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {supplier.createdAt}
+                                                {formatDate(supplier.createdAt, false)}
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
+                                                {dIsLoading ? (
+                                                    <Loader key={supplier.id} className="max-w-6" />
+                                                ) : (
+                                                    <div>
+                                                        <button onClick={() => handleShowModalEdit(false, supplier)} className="font-medium text-blue-600 hover:underline mr-2">Editar</button>
+                                                        <button onClick={() => handleDelete(supplier.id)} className="font-medium text-red-700 hover:underline">Eliminar</button>
+                                                    </div>
+                                                )
+
+                                                }
                                             </td>
                                         </tr>
                                     ))

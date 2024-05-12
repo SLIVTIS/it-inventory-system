@@ -1,9 +1,9 @@
 import "./Loader.css";
 
-function Loader() {
+function Loader({ className }) {
     return (
         <>
-            <div className="dot-spinner">
+            <div className={`dot-spinner ${className}`}>
                 <div className="dot-spinner__dot"></div>
                 <div className="dot-spinner__dot"></div>
                 <div className="dot-spinner__dot"></div>

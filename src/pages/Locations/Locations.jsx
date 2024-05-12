@@ -113,8 +113,7 @@ function Locations() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <button className='px-2' onClick={() => handleModalPermission(location.id)}>Asignar</button>
-                                                <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
+                                                <button className="font-medium text-blue-600 hover:underline" onClick={() => handleModalPermission(location.id)}>Asignar</button>
                                             </td>
                                         </tr>
                                     ))
