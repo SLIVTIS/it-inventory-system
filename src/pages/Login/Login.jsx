@@ -2,6 +2,7 @@ import useFetch from "../../hooks/useFetch";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import API_DOMAIN from "../../config";
 
 function Login() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ function Login() {
       password: password
     };
 
-    fetchData("https://it-inventory-api.up.railway.app/api/v1/login", 'POST', body);
+    fetchData(`${API_DOMAIN}/api/v1/login`, 'POST', body);
   };
 
   return (

@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { SideBarData } from './SideBarData';
 import avatar from '../assets/images/avatar-default.png';
+import { isAdmin } from '../utils/userUtilities';
 
 function NewSideBar({ children }) {
+    const [admin, setAdmin] = useState(isAdmin());
+    const [user, setUser] = useState();
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const [isOpenSidebar, setIsOpenSidebar] = useState(false);
     const navigate = useNavigate()
@@ -21,6 +24,11 @@ function NewSideBar({ children }) {
     const toggleSidebar = () => {
         setIsOpenSidebar(!isOpenSidebar);
     }
+
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        setUser(JSON.parse(user));
+    }, []);
 
     return (
         <>
@@ -69,10 +77,10 @@ function NewSideBar({ children }) {
                                 <div className="absolute right-0 w-48 border rounded shadow-lg bg-gray-700 border-gray-600" id="dropdown-user">
                                     <div className="px-4 py-3" role="none">
                                         <p className="text-sm text-white" role="none">
-                                            Neil Sims
+                                            {user.username}
                                         </p>
                                         <p className="text-sm font-medium truncate text-gray-300" role="none">
-                                            neil.sims@flowbite.com
+                                            {user.email}
                                         </p>
                                     </div>
                                     <ul className="py-1" role="none">
@@ -82,7 +90,7 @@ function NewSideBar({ children }) {
                                                 onClick={logout}
                                                 className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white"
                                                 role="menuitem">
-                                                Sign out
+                                                Cerrar sesión
                                             </a>
                                         </li>
                                     </ul>
@@ -99,20 +107,28 @@ function NewSideBar({ children }) {
                 <div className="h-full px-3 pb-4 overflow-y-auto bg-gray-800">
                     <ul className="space-y-2 font-medium">
                         {SideBarData.map((val, key) => {
-                            return <li key={key}>
-                                <Link to={val.link} className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
-                                    <svg className="w-5 h-5 transition duration-75 text-gray-400  group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                                        {val.icon}
-                                    </svg>
-                                    <span className="ms-3">{val.title}</span>
-                                </Link>
-                            </li>;
+                            // Si admin es true, muestra todos los items
+                            // Si admin es false, muestra solo los items donde isAdmin es false
+                            if (admin || !val.admin) {
+                                return (
+                                    <li key={key}>
+                                        <Link to={val.link} className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group">
+                                            <svg className="w-5 h-5 transition duration-75 text-gray-400  group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                                                {val.icon}
+                                            </svg>
+                                            <span className="ms-3">{val.title}</span>
+                                        </Link>
+                                    </li>
+                                );
+                            } else {
+                                return null; // Si no se cumple la condición, no renderiza el item
+                            }
                         })}
                     </ul>
                 </div>
             </aside>
             <div className="p-4 sm:ml-64">
-                <div className="p-4 rounded-lg mt-14">
+                <div className=" p-4 rounded-lg mt-14">
                     <Outlet />
                 </div>
             </div>

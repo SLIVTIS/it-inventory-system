@@ -9,6 +9,7 @@ import { useState } from 'react'
 import useFetch from '../../hooks/useFetch'
 import NotificationSucces from '../../components/Notification/NotificationSucces'
 import NotificationError from '../../components/Notification/NotificationError'
+import API_DOMAIN from '../../config'
 
 
 function AddUser() {
@@ -53,7 +54,7 @@ function AddUser() {
             permissions: selectedPermission
         };
         if (passCorrect) {
-            fetchData("https://it-inventory-api.up.railway.app/api/v1/admin", 'POST', body);
+            fetchData(`${API_DOMAIN}/api/v1/admin`, 'POST', body);
         } else {
             console.log("Las contraseñas no coinciden");
         }

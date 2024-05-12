@@ -3,19 +3,22 @@ import useFetch from '../../hooks/useFetch.js';
 import Button from '../../components/Buttons/Button.jsx';
 import ModalAddStock from './ModalAddStock.jsx';
 import Loader from '../../components/Loaders/Loader.jsx';
+import { isAdmin } from '../../utils/userUtilities.js';
+import API_DOMAIN from '../../config.js';
 
 function StockGeneral() {
+    const [admin, setAdmin] = useState(isAdmin());
     const [showModal, setShowModal] = useState(false);
     const { data, error, isLoading, fetchData } = useFetch();
 
     useEffect(() => {
-        fetchData("https://it-inventory-api.up.railway.app/api/v1/stock");
+        fetchData(`${API_DOMAIN}/api/v1/stock`);
     }, []);
 
     const handleShowModal = (value) => {
         setShowModal(!showModal);
         if (value === true) {
-            fetchData("https://it-inventory-api.up.railway.app/api/v1/stock");
+            fetchData(`${API_DOMAIN}/api/v1/stock`);
         }
     };
     return (
@@ -26,13 +29,13 @@ function StockGeneral() {
                     <Loader />
                 </div>
             ) : (
-                <div className="flex flex-col gap-8 p-6">
+                <div className="flex flex-col gap-8 p-6 overflow-y-hidden">
                     <div className="flex items-center justify-between">
                         <h1 className='text-2xl font-bold'>Stock general</h1>
-                        <Button onClick={handleShowModal}  >Agregar articulo</Button>
+                        {admin && <Button onClick={handleShowModal}  >Agregar articulo</Button>}
                     </div>
 
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <div className=" shadow-md sm:rounded-lg">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-600 ">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-100">
                                 <tr>
@@ -82,7 +85,7 @@ function StockGeneral() {
                                                 {article.active === true ? "Activo" : "Inactivo"}
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
+                                                {admin && <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>}
                                             </td>
                                         </tr>
                                     ))

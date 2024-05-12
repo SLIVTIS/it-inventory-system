@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/useFetch';
 import Button from '../../components/Buttons/Button';
+import API_DOMAIN from '../../config';
 
 function ModalAddStock({ close }) {
     const { data, error: errorData, isLoading, fetchData } = useFetch();
@@ -35,7 +36,7 @@ function ModalAddStock({ close }) {
         e.preventDefault();
         formData.model === '' || formData.model === 'Selecciona el modelo' ?
             setError('Selecciona el modelo') :
-            fetchData("https://it-inventory-api.up.railway.app/api/v1/stock", "POST", formData);
+            fetchData(`${API_DOMAIN}/api/v1/stock`, "POST", formData);
     };
 
     useEffect(() => {
@@ -57,15 +58,15 @@ function ModalAddStock({ close }) {
     useEffect(() => {
         if (categories) {
             if (formData.categorie !== 'Todas') {
-                articleData("https://it-inventory-api.up.railway.app/api/v1/articles/category/" + formData.categorie);
+                articleData(`${API_DOMAIN}/api/v1/articles/category/` + formData.categorie);
             } else {
-                articleData("https://it-inventory-api.up.railway.app/api/v1/articles");
+                articleData(`${API_DOMAIN}/api/v1/articles`);
             }
         }
     }, [categories, formData]);
 
     useEffect(() => {
-        categorieData("https://it-inventory-api.up.railway.app/api/v1/categories");
+        categorieData(`${API_DOMAIN}/api/v1/categories`);
     }, []);
 
     return (

@@ -3,18 +3,19 @@ import Button from '../../components/Buttons/Button'
 import useFetch from '../../hooks/useFetch';
 import ModalAddModel from './ModalAddModel';
 import Loader from '../../components/Loaders/Loader';
+import API_DOMAIN from '../../config';
 
 function Models() {
     const [showModal, setShowModal] = useState(false);
     const { data, error, isLoading, fetchData } = useFetch();
 
     useEffect(() => {
-        fetchData("https://it-inventory-api.up.railway.app/api/v1/articles");
+        fetchData(`${API_DOMAIN}/api/v1/articles`);
     }, []);
 
     const handleShowModal = (value) => {
         if (value === true) {
-            fetchData("https://it-inventory-api.up.railway.app/api/v1/articles");
+            fetchData(`${API_DOMAIN}/api/v1/articles`);
         }
         setShowModal(!showModal);
     };

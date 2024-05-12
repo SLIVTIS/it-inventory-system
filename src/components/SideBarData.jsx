@@ -12,41 +12,49 @@ export const SideBarData = [
     {
         title: "Home",
         icon: <HomeIcon />,
-        link: "/dashboard"
+        link: "/dashboard",
+        admin: false
     },
     {
         title: "Paises",
         icon: <PublicIcon />,
-        link: "/countries"
+        link: "/countries",
+        admin: true
     },
     {
         title: "Ubicaciones",
         icon: <LocationOnIcon />,
-        link: "/locations"
+        link: "/locations",
+        admin: true
     },
     {
         title: "Locales",
         icon: <StoreIcon />,
-        link: "/store"
+        link: "/store",
+        admin: false
     },
     {
         title: "Stock general",
         icon: <InventoryIcon />,
-        link: "/stock"
+        link: "/stock",
+        admin: false
     },
     {
         title: "Proveedores",
         icon: <BusinessIcon />,
-        link: "/suppliers"
+        link: "/suppliers",
+        admin: true
     },
     {
         title: "Modelos",
         icon: <DevicesIcon />,
-        link: "/models"
+        link: "/models",
+        admin: true
     },
     {
         title: "Usuarios",
         icon: <GroupIcon />,
-        link: "/users"
+        link: "/users",
+        admin: true
     }
 ];

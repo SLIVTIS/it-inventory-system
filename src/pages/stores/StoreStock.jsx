@@ -4,25 +4,87 @@ import Button from '../../components/Buttons/Button.jsx';
 import { useParams } from 'react-router-dom';
 import ModalStoreStock from './ModalStoreStock.jsx';
 import Loader from '../../components/Loaders/Loader.jsx';
+import ModalResponsive from './ModalResponsive.jsx';
+import ModalReassign from './ModalReassign.jsx';
+import { isAdmin } from '../../utils/userUtilities.js';
+import CloseIcon from '@mui/icons-material/Close';
+import ModalAssignUser from './ModalAssignUser.jsx';
+import API_DOMAIN from '../../config.js';
 
 function StoreStock() {
+    const [admin, setAdmin] = useState(isAdmin());
     const { storeId, title } = useParams();
     const [showModal, setShowModal] = useState(false);
+    const [showModalResponsive, setShowModalResponsive] = useState(false);
+    const [showModalReassign, setShowModalReassign] = useState(null);
+    const [showModalUser, setShowModalUser] = useState(null);
+    const [users, setUsers] = useState([]);
     const { data, error, isLoading, fetchData } = useFetch();
+    const { data: resetState, error: rError, isLoading: rIsLoading, fetchData: resetStateData } = useFetch();
+    const { data: store, error: sError, isLoading: sIsLoading, fetchData: storeData } = useFetch();
 
-    useEffect(() => {
-        fetchData(`https://it-inventory-api.up.railway.app/api/v1/stock-store/${storeId}`);
-    }, []);
+    const handleFetch = () => {
+        fetchData(`${API_DOMAIN}/api/v1/stock/${storeId}`);
+    }
+    const handleFetchStore = () => {
+        storeData(`${API_DOMAIN}/api/v1/stores/${storeId}`);
+    }
+    const handleFetchReset = () => {
+        resetStateData(`${API_DOMAIN}/api/v1/state/reset`, 'PATCH', formData);
+    }
 
+    const handleResetState = (value) => {
+        const formData = {
+            stateId: value.statusId,
+            status: value.status,
+        }
+        handleFetchReset();
+    }
     const handleShowModal = (value) => {
         setShowModal(!showModal);
         if (value === true) {
-            fetchData(`https://it-inventory-api.up.railway.app/api/v1/stock-store/${storeId}`);
+            handleFetch();
         }
     };
+
+    const handleShowModalUser = (value, update) => {
+        setShowModalUser(value);
+        if (update === true) {
+            handleFetchStore();
+        }
+    }
+
+    const handleShowModalReassign = (value, update) => {
+        setShowModalReassign(value);
+        if (update === true) {
+            handleFetch();
+        }
+    };
+
+    const handleShowModalResponsive = () => {
+        setShowModalResponsive(!showModalResponsive);
+    };
+
+    const handleUnassign = (value) => {
+        console.log(value);
+    }
+
+    useEffect(() => {
+        handleFetch();
+        handleFetchStore();
+    }, []);
+
+    useEffect(() => {
+        if (store) {
+            setUsers(store.user);
+        }
+    }, [store, users]);
     return (
         <>
             {showModal && <ModalStoreStock close={handleShowModal} storeId={storeId} title={title} />}
+            {showModalReassign && <ModalReassign close={handleShowModalReassign} storeId={storeId} article={showModalReassign} />}
+            {showModalResponsive && <ModalResponsive close={handleShowModalResponsive} storeId={storeId} />}
+            {showModalUser && <ModalAssignUser close={handleShowModalUser} storeId={showModalUser} usersList={users} />}
             {isLoading ? (
                 <div className='w-full h-full grid place-items-center'>
                     <Loader />
@@ -31,7 +93,28 @@ function StoreStock() {
                 <div className="flex flex-col gap-8 p-6">
                     <div className="flex items-center justify-between">
                         <h1 className='text-2xl font-bold'>{title}</h1>
-                        <Button onClick={handleShowModal}  >Asignar equipos</Button>
+                        <div>
+                            <Button onClick={handleShowModalResponsive}  >Responsiva</Button>
+                            {admin && <Button className={'mx-2'} onClick={handleShowModal}  >Asignar equipos</Button>}
+                            {admin && <Button onClick={() => handleShowModalUser(storeId)}  >Asignar tecnico</Button>}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2">
+                        <p className="text-sm text-gray-600">Sucursal: {store && store.name}</p>
+                        <p className="text-sm text-gray-600">Ubicación: {store && store.location.code}</p>
+                        <div className="text-sm text-gray-600">
+                            <p>Usuarios asignados:</p>
+                            {users && users.length > 0 ? users.map(user => {
+                                return <div key={user.User.id}>
+                                    <span>{user.User.username} </span>
+                                    {admin && <button className=' text-red-700' onClick={() => handleUnassign(user.User.username)}>
+                                        <CloseIcon className='p-0.5' />
+                                    </button>}
+                                </div>
+                            }) : 'No hay usuarios asignados'}
+
+                        </div>
+                        <p className="text-sm text-gray-600">Dirección: {store && store.address}</p>
                     </div>
 
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -51,6 +134,9 @@ function StoreStock() {
                                         Serie
                                     </th>
                                     <th scope="col" className="px-6 py-3">
+                                        Estado
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
                                         Comentario
                                     </th>
                                     <th scope="col" className="px-6 py-3">
@@ -61,24 +147,34 @@ function StoreStock() {
                             <tbody>
                                 {data && data.length > 0 ? (
                                     data.map(article => (
-                                        <tr className="bg-white border-b  hover:bg-gray-50 " key={article.id}>
+                                        <tr className="bg-white border-b  hover:bg-gray-50 " key={article.stockStoreId}>
                                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                                {article.stock.article.categorie.name}
+                                                {article.categorie}
                                             </th>
                                             <td className="px-6 py-4">
-                                                {article.stock.article.supplier.name}
+                                                {article.supplier}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {article.stock.article.modelname}
+                                                {article.modelname}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {article.stock.serie}
+                                                {article.serie}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {article.status}
                                             </td>
                                             <td className="px-6 py-4">
                                                 {article.comment}
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
+                                                {article.status === 'rechazada' && admin && <button
+                                                    onClick={() => handleResetState(article)}
+                                                    className='mx-2 font-medium text-blue-600 hover:underline'
+                                                >Reenviar</button>}
+                                                <button
+                                                    onClick={() => handleShowModalReassign(article)}
+                                                    className='mx-2 font-medium text-blue-600 hover:underline'
+                                                >Reasignar</button>
                                             </td>
                                         </tr>
                                     ))

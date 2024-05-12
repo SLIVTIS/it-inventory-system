@@ -4,21 +4,26 @@ import Button from '../../components/Buttons/Button';
 import { useNavigate } from 'react-router-dom';
 import ModalAddSupplier from './ModalAddSupplier';
 import Loader from '../../components/Loaders/Loader';
+import API_DOMAIN from '../../config';
 
 function Suppliers() {
     const navigate = useNavigate();
     const { data, error, isLoading, fetchData } = useFetch();
     const [showModal, setShowModal] = useState(false);
 
+    const handleFetch = () => {
+        fetchData(`${API_DOMAIN}/api/v1/suppliers`);
+    }
+
     const handleShowModal = (value) => {
         setShowModal(!showModal);
         if (value === true) {
-            fetchData("https://it-inventory-api.up.railway.app/api/v1/suppliers");
+            handleFetch();
         }
     };
 
     useEffect(() => {
-        fetchData("https://it-inventory-api.up.railway.app/api/v1/suppliers");
+        handleFetch();
     }, []);
 
     return (

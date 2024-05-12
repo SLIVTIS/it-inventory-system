@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/useFetch';
 import Button from '../../components/Buttons/Button';
+import API_DOMAIN from '../../config';
 
 function ModalStoreStock({ close, storeId, title }) {
     const { data, error: errorData, isLoading, fetchData } = useFetch();
@@ -26,7 +27,7 @@ function ModalStoreStock({ close, storeId, title }) {
                 storeId: storeId,
                 stock: selectedIds
             }
-            fetchData("https://it-inventory-api.up.railway.app/api/v1/stock-store", "POST", data);
+            fetchData(`${API_DOMAIN}/api/v1/stock-store`, "POST", data);
         } else {
             close(false);
         }
@@ -47,7 +48,7 @@ function ModalStoreStock({ close, storeId, title }) {
     }, [errorData, aError]);
 
     useEffect(() => {
-        articlesData("https://it-inventory-api.up.railway.app/api/v1/stock/unassigned");
+        articlesData(`${API_DOMAIN}/api/v1/stock/unassigned`);
     }, []);
     return (
         <>
@@ -110,13 +111,13 @@ function ModalStoreStock({ close, storeId, title }) {
                                                             </div>
                                                         </td>
                                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                                            {article.article.categorie.name}
+                                                            {article.categorie}
                                                         </th>
                                                         <td className="px-6 py-4">
-                                                            {article.article.supplier.name}
+                                                            {article.supplier}
                                                         </td>
                                                         <td className="px-6 py-4">
-                                                            {article.article.modelname}
+                                                            {article.modelname}
                                                         </td>
                                                         <td className="px-6 py-4">
                                                             {article.serie}

@@ -16,10 +16,6 @@
     font-size: 0.875rem;
 }
 
-.grid {
-    gap: 6px;
-}
-
 /* Dark mode styles */
 .dark .section {
     border-color: #4B5563;

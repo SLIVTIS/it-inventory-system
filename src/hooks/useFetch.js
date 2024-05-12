@@ -5,7 +5,7 @@ function useFetch() {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const fetchData = async (url, method = 'GET', body = null) => {
+    const fetchData = async (url, method = 'GET', body = null, isDownload = false) => {
         try {
             // Configura el estado para indicar que la solicitud está en curso
             setIsLoading(true);
@@ -31,9 +31,13 @@ function useFetch() {
             // Verifica si la solicitud fue exitosa
             if (response.ok) {
                 // Parsea la respuesta JSON
-                const data = await response.json();
-                // Actualiza el estado con los datos obtenidos
-                setData(data);
+                if (isDownload) {
+                    const doc = await response.blob();
+                    setData(doc);
+                } else {
+                    const data = await response.json();
+                    setData(data);
+                }
                 setError(null);
             } else {
                 // Si la solicitud no fue exitosa, lanza un error con el mensaje de error

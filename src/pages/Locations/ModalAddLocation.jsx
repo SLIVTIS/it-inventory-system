@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/useFetch';
 import Button from '../../components/Buttons/Button';
+import API_DOMAIN from '../../config';
 
 function ModalAddLocation({ close }) {
     const { data, error: errorData, isLoading, fetchData } = useFetch();
@@ -25,7 +26,7 @@ function ModalAddLocation({ close }) {
         e.preventDefault();
         formData.country === '' || formData.country === 'Selecciona un país' ?
             setError('Selecciona un pais') :
-            fetchData("https://it-inventory-api.up.railway.app/api/v1/locations", "POST", formData);
+            fetchData(`${API_DOMAIN}/api/v1/locations`, "POST", formData);
     };
 
     useEffect(() => {
@@ -43,7 +44,7 @@ function ModalAddLocation({ close }) {
     }, [errorData, cError]);
 
     useEffect(() => {
-        countriesData("https://it-inventory-api.up.railway.app/api/v1/countries");
+        countriesData(`${API_DOMAIN}/api/v1/countries`);
     }, []);
     return (
         <>

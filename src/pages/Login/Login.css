@@ -5,7 +5,7 @@
 }
 
 .form-body {
-  height: 100%;
+  height: 100vh;
   background-color: #23394A;
 }
 
@@ -74,11 +74,13 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.16);
 }
 
-h2 {
+.form-login h2 {
   color: #000;
+  font-weight: 700;
+  font-size: large;
 }
 
-p {
+.form-login p {
   color: #000;
   margin-bottom: 10px;
 }

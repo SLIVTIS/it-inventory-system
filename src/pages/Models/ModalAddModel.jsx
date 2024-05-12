@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/useFetch';
 import Button from '../../components/Buttons/Button';
 import ModalAddCategorie from '../../components/Modals/ModalAddCategorie';
+import API_DOMAIN from '../../config';
 
 function ModalAddModel({ close }) {
     const { data, error, isLoading, fetchData } = useFetch();
@@ -26,13 +27,13 @@ function ModalAddModel({ close }) {
     const handleShowCategories = (value) => {
         setShowCategorie(!showCategorie);
         if (value) {
-            categorieData("https://it-inventory-api.up.railway.app/api/v1/categories");
+            categorieData(`${API_DOMAIN}/api/v1/categories`);
         }
     };
 
     const handleSummit = (e) => {
         e.preventDefault();
-        fetchData("https://it-inventory-api.up.railway.app/api/v1/articles", "POST", formData);
+        fetchData(`${API_DOMAIN}/api/v1/articles`, "POST", formData);
     };
 
     useEffect(() => {
@@ -41,8 +42,8 @@ function ModalAddModel({ close }) {
         }
     }, [data]);
     useEffect(() => {
-        supplierData("https://it-inventory-api.up.railway.app/api/v1/suppliers");
-        categorieData("https://it-inventory-api.up.railway.app/api/v1/categories");
+        supplierData(`${API_DOMAIN}/api/v1/suppliers`);
+        categorieData(`${API_DOMAIN}/api/v1/categories`);
     }, []);
     return (
         <>

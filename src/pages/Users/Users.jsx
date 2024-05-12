@@ -5,6 +5,7 @@ import useFetch from '../../hooks/useFetch';
 import Button from '../../components/Buttons/Button';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loaders/Loader';
+import API_DOMAIN from '../../config';
 
 function Users() {
     const navigate = useNavigate();
@@ -13,8 +14,8 @@ function Users() {
 
     // Llamar a la función fetchData cuando el componente se monta
     React.useEffect(() => {
-        fetchAdmins("https://it-inventory-api.up.railway.app/api/v1/admin");
-        fetchUsers("https://it-inventory-api.up.railway.app/api/v1/admin/users");
+        fetchAdmins(`${API_DOMAIN}/api/v1/admin`);
+        fetchUsers(`${API_DOMAIN}/api/v1/admin/users`);
     }, []); // Solo se llama al montar el componente
 
     const handleNavigate = () => {
